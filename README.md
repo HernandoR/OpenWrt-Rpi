@@ -1,5 +1,8 @@
 # [OpenWrt-Rpi](https://github.com/SuLingGG/OpenWrt-Rpi)
 
+## Fork 说明
+迁移上游到 21.02
+
 ## 仓库存档说明
 
 由于 18.06 版本已结束支持周期，且上游分支 [immortalwrt:openwrt-18.06-k5.4](https://github.com/immortalwrt/immortalwrt/tree/openwrt-18.06-k5.4) 已停止更新，
