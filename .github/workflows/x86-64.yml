@@ -112,7 +112,7 @@ jobs:
           export CACHE_HASH=$(curl -fSsL https://github.com/$GITHUB_REPOSITORY/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.hash)
           echo "CACHE_HASH is $CACHE_HASH"
           if [ -z "$CACHE_HASH" ] || [ "$CURRENT_HASH" != "$CACHE_HASH" ]; then
-            echo "REBUILD_TOOLCHAIN::true" >> $GITHUB_OUTPUT
+            echo "REBUILD_TOOLCHAIN=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Install Feeds
