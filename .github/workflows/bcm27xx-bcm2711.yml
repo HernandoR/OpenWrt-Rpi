@@ -246,7 +246,7 @@ jobs:
 
       - name: Download Toolchain Image Form Artifacts
         if: env.TOOLCHAIN_RELEASE_UPLOAD != 'true'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: ${{ env.TOOLCHAIN_IMAGE }}
           path: workspace
@@ -408,7 +408,7 @@ jobs:
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
       - name: Download Bin Archive
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: bin-archive
           path: ${{ env.OPENWRT_ROOT_PATH }}
