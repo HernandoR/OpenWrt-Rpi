@@ -18,7 +18,7 @@ on:
 env:
   CONFIG_FILE: config/bcm27xx/bcm2710.config
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
-  SOURCE_BRANCH: openwrt-21.02
+  SOURCE_BRANCH: openwrt-23.05
   DIY_SH: scripts/custom.sh
   TOOLCHAIN_TAG: toolchain
   CLASH_BINARY_PLATFORM: armv8

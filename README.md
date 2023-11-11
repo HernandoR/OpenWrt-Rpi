@@ -1,7 +1,7 @@
 # [OpenWrt-Rpi](https://github.com/SuLingGG/OpenWrt-Rpi)
 
 ## Fork 说明
-迁移上游到 21.02
+迁移上游到 23.05
 
 ## 仓库存档说明
 
