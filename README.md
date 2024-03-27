@@ -1,8 +1,30 @@
+<!--
+ * @Author: Zhen Liu lzhen.dev@outlook.com
+ * @CreateDate: Do not edit
+ * @LastEditors: Zhen Liu lzhen.dev@outlook.com
+ * @LastEditTime: 2024-03-27
+ * @Description: 
+ * 
+ * Copyright (c) 2024 by HernandoR lzhen.dev@outlook.com, All Rights Reserved. 
+-->
 # [OpenWrt-Rpi](https://github.com/SuLingGG/OpenWrt-Rpi)
 
 ## Fork 说明
-迁移上游到 21.02
-使用腾讯源
+迁移上游到 23.05
+
+## 仓库存档说明
+
+由于 18.06 版本已结束支持周期，且上游分支 [immortalwrt:openwrt-18.06-k5.4](https://github.com/immortalwrt/immortalwrt/tree/openwrt-18.06-k5.4) 已停止更新，
+
+故本仓库转为存档 (Archive) 状态，终止所有无意义的编译任务。
+
+现有软件源和固件不会被删除，你可以继续在 <https://openwrt.cc> 访问和下载到它们。
+
+欢迎使用 immortalwrt 项目的官方固件:
+
+<https://downloads.immortalwrt.org>
+
+感谢大家的支持和陪伴~
 
 ## 项目介绍
 

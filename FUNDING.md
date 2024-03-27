@@ -1,12 +1,7 @@
 # 捐赠本项目
 
-由于提供自建的固件下载服务需要服务器支持，目前我们已尽量选择 “比较经济” 的服务解决方案。
-
-但若您可以为此项目出一份力，我们将衷心感谢~
-
-我们保证捐赠所得收入将全部用于改善下载体验以及日常维护项目之用。
-
-本项目目前也接受 线路/带宽优秀 的服务器捐赠~
+Connect me if you need customized image.
+lzhen.dev@outlook.com
 
 # 提示
 
@@ -18,4 +13,4 @@
 
 **4. 未满 18 岁及尚无独立经济收入来源者不建议捐赠本项目。**
 
-<img src="https://img03.mifile.cn/v1/MI_542ED8B1722DC/6d609b4650ce286cfe9871260dffc224.png" alt="FUNDING.png" title="FUNDING.png" />
+<!-- <img src="https://img03.mifile.cn/v1/MI_542ED8B1722DC/6d609b4650ce286cfe9871260dffc224.png" alt="FUNDING.png" title="FUNDING.png" /> -->

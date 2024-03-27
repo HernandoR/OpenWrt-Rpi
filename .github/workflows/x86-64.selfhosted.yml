@@ -6,22 +6,23 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build bcm27xx/bcm2709 openwrt
+name: Build on Self-hosted Node x86/64 openwrt
+
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: 0 18 * * 6
+  # schedule:
+  #   - cron: 0 18 * * 6
   # watch:
   #   types: started
 
 env:
-  CONFIG_FILE: config/bcm27xx/bcm2709.config
+  CONFIG_FILE: config/x86/64.config
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
   SOURCE_BRANCH: openwrt-23.05
   DIY_SH: scripts/custom.sh
   TOOLCHAIN_TAG: toolchain
-  CLASH_BINARY_PLATFORM: armv7
+  CLASH_BINARY_PLATFORM: amd64
   TOOLCHAIN_RELEASE_UPLOAD: true
   FIRMWARE_RELEASE_UPLOAD: true
   WEB_ROOT_PATH: /data/www/openwrt.cc
@@ -29,7 +30,7 @@ env:
 
 jobs:
   Toolchain:
-    runs-on: ubuntu-20.04
+    runs-on: [self-hosted, x64]
 
     outputs:
       OPENWRT_ROOT_PATH: ${{ steps.clone.outputs.OPENWRT_ROOT_PATH }}
@@ -339,7 +340,6 @@ jobs:
             mv key-build.pub $(usign -F -p key-build.pub)
           fi
           cd $OPENWRT_ROOT_PATH
-          echo "dtparam=i2c_arm=on,audio=on" >> target/linux/bcm27xx/image/config.txt
           mkdir -p files/etc/uci-defaults/
           cp $GITHUB_WORKSPACE/scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
           mkdir -p files/www/snapshots
@@ -424,34 +424,34 @@ jobs:
           rm -rf packages
           df -hT $PWD
 
-      - name: Deploy Files To HostHatch Node
-        env:
-          HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.HOSTHATCH_IP }}"
-          SOURCE_TARGETS: "${{ env.OPENWRT_ROOT_PATH }}/bin/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
-          DEST_TARGETS: "${{ env.WEB_ROOT_PATH }}/releases/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
-          REMOTE_PRIVATEKEY: "${{ secrets.HOSTHATCH_PRIVATEKEY }}"
-        if: env.REMOTE_PRIVATEKEY != null
-        run: |
-          mkdir -p ~/.ssh/
-          install -m 600 /dev/null ~/.ssh/id_rsa
-          echo "${{ secrets.HOSTHATCH_PRIVATEKEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
-          bash -c "'mkdir -p $WEB_ROOT_PATH/releases/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET'"
-          rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
+      # - name: Deploy Files To HostHatch Node
+      #   env:
+      #     HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.HOSTHATCH_IP }}"
+      #     SOURCE_TARGETS: "${{ env.OPENWRT_ROOT_PATH }}/bin/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
+      #     DEST_TARGETS: "${{ env.WEB_ROOT_PATH }}/releases/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
+      #     REMOTE_PRIVATEKEY: "${{ secrets.HOSTHATCH_PRIVATEKEY }}"
+      #   if: env.REMOTE_PRIVATEKEY != null
+      #   run: |
+      #     mkdir -p ~/.ssh/
+      #     install -m 600 /dev/null ~/.ssh/id_rsa
+      #     echo "${{ secrets.HOSTHATCH_PRIVATEKEY }}" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
+      #     bash -c "'mkdir -p $WEB_ROOT_PATH/releases/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET'"
+      #     rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
 
-      - name: Deploy Files To Backblaze
-        env:
-          B2_APPLICATION_KEY: "${{ secrets.B2_APPLICATION_KEY }}"
-          B2_APPLICATION_KEY_ID: "${{ secrets.B2_APPLICATION_KEY_ID }}"
-          SOURCE_TARGETS: "${{ env.OPENWRT_ROOT_PATH }}/bin/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
-          DEST_TARGETS: "b2://${{ secrets.B2_BUCKETNAME }}/releases/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
-        if: env.B2_APPLICATION_KEY != null && env.B2_APPLICATION_KEY_ID != null
-        run: |
-          sudo wget -q -O /bin/b2 https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux
-          sudo chmod +x /bin/b2
-          b2 authorize-account $B2_APPLICATION_KEY_ID $B2_APPLICATION_KEY
-          b2 sync --noProgress --threads 32 --keepDays 7 --replaceNewer $SOURCE_TARGETS $DEST_TARGETS
+      # - name: Deploy Files To Backblaze
+      #   env:
+      #     B2_APPLICATION_KEY: "${{ secrets.B2_APPLICATION_KEY }}"
+      #     B2_APPLICATION_KEY_ID: "${{ secrets.B2_APPLICATION_KEY_ID }}"
+      #     SOURCE_TARGETS: "${{ env.OPENWRT_ROOT_PATH }}/bin/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
+      #     DEST_TARGETS: "b2://${{ secrets.B2_BUCKETNAME }}/releases/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
+      #   if: env.B2_APPLICATION_KEY != null && env.B2_APPLICATION_KEY_ID != null
+      #   run: |
+      #     sudo wget -q -O /bin/b2 https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux
+      #     sudo chmod +x /bin/b2
+      #     b2 authorize-account $B2_APPLICATION_KEY_ID $B2_APPLICATION_KEY
+      #     b2 sync --noProgress --threads 32 --keepDays 7 --replaceNewer $SOURCE_TARGETS $DEST_TARGETS
 
       - name: Delete Old Firmware Assets
         if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
