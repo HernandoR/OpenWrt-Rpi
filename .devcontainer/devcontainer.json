@@ -1,0 +1,50 @@
+ // For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "Ubuntu-immwrt",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+	"features": {
+		"ghcr.io/jungaretti/features/make:1": {}
+	},
+	"remoteUser":"vscode",
+	"containerUser": "vscode", // the value needs to match the value of "remoteUser"
+
+	"runArgs": ["--userns=keep-id"],
+	"mounts": [
+        // "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind",
+        // map in home directory - not strictly necessary but useful
+        "source=${localEnv:HOME},target=${localEnv:HOME},type=bind,consistency=cached"
+    ],
+    // make the workspace folder the same inside and outside of the container
+    "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
+    "workspaceFolder": "${localWorkspaceFolder}",
+	"onCreateCommand":["sed -i 's/http:\/\/archive.ubuntu.com\/ubuntu/http:\/\/security.ubuntu.com\/ubuntu/g' /etc/apt/sources.list"],
+	"updateContentCommand": [
+		"apt update -y &&",
+		"apt full-upgrade -y &&",
+		"apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential",
+		"bzip2 ccache clang cmake cpio curl device-tree-compiler ecj fastjar flex gawk gettext gcc-multilib",
+		"g++-multilib git gnutls-dev gperf haveged help2man intltool lib32gcc-s1 libc6-dev-i386 libelf-dev",
+		"libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5",
+		"libncursesw5-dev libpython3-dev libreadline-dev libssl-dev libtool lld llvm lrzsz mkisofs msmtp",
+		"nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pip python3-ply",
+		"python3-docutils python3-pyelftools qemu-utils re2c rsync scons squashfs-tools subversion swig",
+		"texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev"
+	],
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "uname -a",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

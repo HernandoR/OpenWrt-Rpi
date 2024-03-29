@@ -4,19 +4,20 @@ set -e
 
 # Define functions for each step
 initialization_environment() {
-    sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-    sudo -E apt-get -qq update
-    sudo -E apt-get -qq install squashfs-tools $(curl -fsSL git.io/depends-ubuntu-2004)
-    sudo -E apt-get -qq autoremove --purge
-    sudo -E apt-get -qq clean
-    sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-    docker image prune -a -f
-    mkdir -p workspace
+    # sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+    # sudo -E apt-get -qq update
+    # sudo -E apt-get -qq install squashfs-tools $(curl -fsSL git.io/depends-ubuntu-2004)
+    # sudo -E apt-get -qq autoremove --purge
+    # sudo -E apt-get -qq clean
+    # sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+    # docker image prune -a -f
+    # mkdir -p workspace
+    sudo bash -c 'bash <(curl -s https://build-scripts.immortalwrt.eu.org/init_build_environment.sh)'
 }
 
 clone_source_code() {
     df -hT $PWD
-    git clone $SOURCE_URL -b $SOURCE_BRANCH workspace/openwrt
+    git clone $SOURCE_URL -b $SOURCE_BRANCH --single-branch --filter=blob:none --depth=1  workspace/openwrt
     cd workspace/openwrt
     echo "OPENWRT_ROOT_PATH=$PWD" >>$GITHUB_ENV
     echo "OPENWRT_ROOT_PATH=$(echo $PWD)" >>$GITHUB_OUTPUT
